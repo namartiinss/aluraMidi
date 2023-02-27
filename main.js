@@ -1,24 +1,35 @@
-/* No nosso caso a função tocaSom está recebendo o ID de um elemento que vai ser 
-   buscado pelo querySelector e então reproduzido o seu som através da função play. */
-function tocaSom(idElementoAudio) {
-    document.querySelector(idElementoAudio).play();
+
+function tocaSom(seletorAudio) {
+    const elemento = document.querySelector(seletorAudio);
+
+    if (elemento && elemento.localName === 'audio') {
+        elemento.play();
+    } else {
+        console.log('Elemento não encontrado ou seletor inválido');
+    }
 }
 
-const listaDeTeclas = document.querySelectorAll('.tecla');
+    const listaDeTeclas = document.querySelectorAll('.tecla');
 
-let contador = 0;
+    for (let contador = 0; contador < listaDeTeclas.length; contador++) {
 
-//Enquanto 
-while (contador < listaDeTeclas.length) {
+        const tecla = listaDeTeclas[contador];
+        const instrumento = tecla.classList[1];
+        const idAudio = `#som_${instrumento}`; //template string
 
-    //isso vai nos retornar uma lista que é um tipo de dado
-    const instrumento = tecla.classList[1];
-    const idAudio = `#som_${instrumento}`;
+        tecla.onclick = function () {
+            tocaSom(idAudio);
+        }
 
-    //A cada elemento vamos acessar seu onclick e atribuir uma função anônima e aí sim chamará função tocaSom.
-    tecla.onclick = function () {
-        tocaSom(idAudio);
-    };
+        tecla.onkeydown = function (evento) {
 
-    contador = contador + 1;
-}
+            if (evento.code === 'Space' || evento.code === 'Enter') {
+                tecla.classList.add('ativa');
+            }
+        }
+
+        tecla.onkeyup = function () {
+            tecla.classList.remove('ativa');
+        }
+
+    }
